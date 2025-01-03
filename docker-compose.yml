@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: savings-tracker-be
+      POSTGRES_PASSWORD: savings-tracker-be
+      POSTGRES_DB: savingstracker
+volumes:
+  postgres_data:
+    driver: local

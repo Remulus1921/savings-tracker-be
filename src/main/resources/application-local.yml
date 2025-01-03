@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/savingstracker
+    username: savings-tracker-be
+    password: savings-tracker-be
+    driver-class-name: org.postgresql.Driver
+
+config:
+  frontend-url: ${FRONT_END_URL}
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: savings-tracker-be
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database: postgresql
+    hibernate:
+        ddl-auto: create-drop
+    show-sql: true
+
+config:
+  frontend-url: ssdasdadawe
+  jwt:
+    secret-key: secret

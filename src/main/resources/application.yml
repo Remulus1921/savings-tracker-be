@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: savings-tracker-be
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+    show-sql: true
