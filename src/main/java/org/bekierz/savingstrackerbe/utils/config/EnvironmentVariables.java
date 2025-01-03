@@ -2,13 +2,13 @@ package org.bekierz.savingstrackerbe.utils.config;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @NoArgsConstructor
 @Getter
-@Primary
+@Setter
 @Component
 public class EnvironmentVariables {
     @Value("${config.frontend-url}")

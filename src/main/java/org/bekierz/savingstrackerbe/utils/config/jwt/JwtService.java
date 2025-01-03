@@ -4,20 +4,21 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.bekierz.savingstrackerbe.user.model.CustomUserDetails;
 import org.bekierz.savingstrackerbe.utils.config.EnvironmentVariables;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.time.Instant;
 import java.util.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.function.Function;
 
 @Service
-@Log4j
+@Log4j2
 public class JwtService {
 
     private final EnvironmentVariables environmentVariables;
@@ -45,11 +46,11 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(java.sql.Date.valueOf(LocalDate.now()))
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(30)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(Date.from(Instant.now()))
+                .expiration(java.sql.Date.valueOf(LocalDate.now().plusDays(30)))
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -69,13 +70,13 @@ public class JwtService {
     private Claims extractClaims(String jwtToken) {
         return Jwts
                 .parser()
-                .setSigningKey(getSigningKey())
+                .verifyWith(getSigningKey())
                 .build()
-                .parseClaimsJws(jwtToken)
-                .getBody();
+                .parseSignedClaims(jwtToken)
+                .getPayload();
     }
 
-    private Key getSigningKey() {
+    private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(environmentVariables.getJwtSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
