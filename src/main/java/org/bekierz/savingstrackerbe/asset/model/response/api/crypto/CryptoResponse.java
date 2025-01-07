@@ -5,7 +5,7 @@ import java.util.List;
 public record CryptoResponse(
         List<Data> data
 ) {
-    private record Data(
+    public record Data(
             String id,
             String symbol,
             String name

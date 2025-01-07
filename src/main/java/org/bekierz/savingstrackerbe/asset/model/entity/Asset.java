@@ -3,11 +3,13 @@ package org.bekierz.savingstrackerbe.asset.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 @Entity(name = "assets")
 public class Asset {

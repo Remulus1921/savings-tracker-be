@@ -1,5 +1,6 @@
 package org.bekierz.savingstrackerbe.asset.service.datasource.crypto;
 
+import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.response.api.crypto.CryptoMonthResponse;
@@ -20,9 +21,11 @@ import java.util.List;
 public class CryptocurrencyAssetHandler implements AssetHandler {
 
     private final RestTemplate restTemplate;
+    private final AssetConfigProps assetConfigProps;
 
-    public CryptocurrencyAssetHandler(RestTemplate restTemplate) {
+    public CryptocurrencyAssetHandler(RestTemplate restTemplate, AssetConfigProps assetConfigProps) {
         this.restTemplate = restTemplate;
+        this.assetConfigProps = assetConfigProps;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
         long start = Instant.ofEpochMilli(end)
                 .minus(30, ChronoUnit.DAYS)
                 .toEpochMilli();
-        String cryptocurrencyApiUrl = "https://api.coincap.io/v2/assets/" + asset.getName()
+        String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + asset.getName()
                 + "/history?interval=d1&start=" + start + "&end=" + end;
 
         ResponseEntity<CryptoMonthResponse> response = restTemplate
@@ -39,12 +42,12 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
 
         CryptoMonthResponse assetResponse = response.getBody();
 
-        String udsUrl = "http://api.nbp.pl/api/exchangerates/rates/c/usd/last/1/?format=json";
+        String udsUrl = assetConfigProps.api().currencyUrl() + "rates/c/usd/last/1/?format=json";
         CurrencyResponse usdResponse = restTemplate
                 .getForEntity(udsUrl, CurrencyResponse.class).getBody();
 
         assert usdResponse != null;
-        Double usdValue = usdResponse.rates().getFirst().ask();
+        double usdValue = usdResponse.rates().getFirst().ask();
 
         assert assetResponse != null;
         return assetResponse.data().stream()

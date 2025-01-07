@@ -9,3 +9,11 @@ config:
   frontend-url: ${FRONT_END_URL}
   jwt:
     secret-key: ${JWT_SECRET_KEY}
+  asset:
+    api:
+      currencyUrl: "https://api.nbp.pl/api/exchangerates/"
+      cryptoUrl: "https://api.coincap.io/v2/assets/"
+    types:
+      - "currency"
+      - "crypto"
+      - "precious-metal"

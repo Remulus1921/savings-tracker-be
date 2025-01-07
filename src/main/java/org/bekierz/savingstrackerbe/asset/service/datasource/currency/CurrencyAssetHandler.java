@@ -1,5 +1,6 @@
 package org.bekierz.savingstrackerbe.asset.service.datasource.currency;
 
+import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyMonthResponse;
@@ -16,9 +17,11 @@ import java.util.List;
 public class CurrencyAssetHandler implements AssetHandler {
 
     private final RestTemplate restTemplate;
+    private final AssetConfigProps assetConfigProps;
 
-    public CurrencyAssetHandler(RestTemplate restTemplate) {
+    public CurrencyAssetHandler(RestTemplate restTemplate, AssetConfigProps assetConfigProps) {
         this.restTemplate = restTemplate;
+        this.assetConfigProps = assetConfigProps;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class CurrencyAssetHandler implements AssetHandler {
         String begineDate = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String finishDate = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        String currencyUrl = "https://api.nbp.pl/api/exchangerates/rates/c/" + asset.getCode() + "/"
+        String currencyUrl = assetConfigProps.api().currencyUrl() + "rates/c/" + asset.getCode() + "/"
                 + begineDate + "/" + finishDate + "/";
         ResponseEntity<CurrencyMonthResponse> response = restTemplate
                 .getForEntity(currencyUrl, CurrencyMonthResponse.class);

@@ -32,6 +32,6 @@ public class AssetController extends BaseController {
     @GetMapping("/month/{assetCode}")
     public ResponseEntity<ApiResponse<List<AssetMonthValueDto>>> getMonthValue(@PathVariable String assetCode) {
         List<AssetMonthValueDto> assets = assetService.getMonthValue(assetCode);
-        return ok(assets, "Assets retrieved successfully");
+        return ok(assets, "Asset retrieved successfully");
     }
 }

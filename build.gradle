@@ -32,8 +32,8 @@ dependencies {
 	implementation "io.jsonwebtoken:jjwt-api:${versions.jwt}"
 	implementation "org.modelmapper:modelmapper:${versions.modelmapper}"
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+	implementation "org.postgresql:postgresql:${versions.postgresql}"
 
-	runtimeOnly "org.postgresql:postgresql:${versions.postgresql}"
 	runtimeOnly "io.jsonwebtoken:jjwt-impl:${versions.jwt}"
 	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${versions.jwt}"
 

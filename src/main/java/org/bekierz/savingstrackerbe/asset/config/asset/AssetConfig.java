@@ -1,4 +1,4 @@
-package org.bekierz.savingstrackerbe.asset.config;
+package org.bekierz.savingstrackerbe.asset.config.asset;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
