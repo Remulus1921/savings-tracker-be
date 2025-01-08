@@ -6,11 +6,13 @@ import org.bekierz.savingstrackerbe.commons.controller.BaseController;
 import org.bekierz.savingstrackerbe.commons.model.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("api/v1/asset-types")
+@RestController
+@RequestMapping("api/v1/asset-types")
 public class AssetTypeController extends BaseController {
     private final AssetTypeService assetTypeService;
 
