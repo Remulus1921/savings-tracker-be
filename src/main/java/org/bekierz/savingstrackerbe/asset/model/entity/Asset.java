@@ -2,10 +2,7 @@ package org.bekierz.savingstrackerbe.asset.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,5 +19,6 @@ public class Asset {
     private String code;
 
     @ManyToOne
+    @ToString.Exclude
     private AssetType assetType;
 }

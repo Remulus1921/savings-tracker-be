@@ -2,10 +2,7 @@ package org.bekierz.savingstrackerbe.asset.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -22,5 +19,6 @@ public class AssetType {
     private String name;
 
     @OneToMany(mappedBy = "assetType", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Asset> assets;
 }
