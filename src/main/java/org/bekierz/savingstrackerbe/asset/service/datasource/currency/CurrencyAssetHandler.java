@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.asset.service.datasource.currency;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
-import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyMonthResponse;
+import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyRatesResponse;
 import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -26,15 +26,15 @@ public class CurrencyAssetHandler implements AssetHandler {
 
     @Override
     public List<AssetMonthValueDto> handle(Asset asset, LocalDate startDate, LocalDate endDate) {
-        String begineDate = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String beginDate = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String finishDate = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         String currencyUrl = assetConfigProps.api().currencyUrl() + "rates/c/" + asset.getCode() + "/"
-                + begineDate + "/" + finishDate + "/";
-        ResponseEntity<CurrencyMonthResponse> response = restTemplate
-                .getForEntity(currencyUrl, CurrencyMonthResponse.class);
+                + beginDate + "/" + finishDate + "/";
+        ResponseEntity<CurrencyRatesResponse> response = restTemplate
+                .getForEntity(currencyUrl, CurrencyRatesResponse.class);
 
-        CurrencyMonthResponse assetResponse = response.getBody();
+        CurrencyRatesResponse assetResponse = response.getBody();
 
         assert assetResponse != null;
         return assetResponse.rates().stream()

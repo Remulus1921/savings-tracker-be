@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.asset.model.response.api.currency;
 
 import java.util.List;
 
-public record CurrencyMonthResponse(
+public record CurrencyRatesResponse(
         String table,
         String currency,
         String code,

@@ -11,7 +11,7 @@ public record CurrencyResponse(
     public record Rate(
             String currency,
             String code,
-            double ask
+            double mid
     ) {
     }
 }

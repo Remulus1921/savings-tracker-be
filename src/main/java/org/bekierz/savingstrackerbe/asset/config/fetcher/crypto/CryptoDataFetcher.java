@@ -37,14 +37,14 @@ public class CryptoDataFetcher implements AssetDataFetcher {
         CryptoResponse cryptoResponse = response.getBody();
 
         if(cryptoResponse == null || cryptoResponse.data() == null) {
-            throw new RuntimeException("Failed to fetch crypto data");
+            throw new RuntimeException("Failed to fetch cryptocurrency data");
         }
 
         assetRepository.saveAll(cryptoResponse.data().stream()
                 .map(data -> Asset.builder()
                         .name(data.name())
                         .code(data.symbol())
-                        .assetType(assetTypeRepository.findByName("crypto"))
+                        .assetType(assetTypeRepository.findByName("cryptocurrency"))
                         .build())
                 .toList()
         );

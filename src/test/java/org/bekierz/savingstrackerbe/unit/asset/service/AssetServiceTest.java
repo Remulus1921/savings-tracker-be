@@ -1,22 +1,17 @@
 package org.bekierz.savingstrackerbe.unit.asset.service;
 
-import jakarta.validation.constraints.Null;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetDto;
-import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.entity.AssetType;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.service.AssetService;
 import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandler;
 import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandlerRegistry;
-import org.bekierz.savingstrackerbe.asset.service.datasource.currency.CurrencyAssetHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.Collections;

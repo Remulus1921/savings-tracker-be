@@ -4,6 +4,7 @@ import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.response.api.crypto.CryptoMonthResponse;
+import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyRatesResponse;
 import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyResponse;
 import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandler;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,8 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
 
     @Override
     public List<AssetMonthValueDto> handle(Asset asset, LocalDate startDate, LocalDate endDate) {
-        long end = System.currentTimeMillis();
-        long start = Instant.ofEpochMilli(end)
-                .minus(30, ChronoUnit.DAYS)
-                .toEpochMilli();
+        long end = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long start = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
         String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + asset.getName()
                 + "/history?interval=d1&start=" + start + "&end=" + end;
 
@@ -43,8 +42,8 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
         CryptoMonthResponse assetResponse = response.getBody();
 
         String udsUrl = assetConfigProps.api().currencyUrl() + "rates/c/usd/last/1/?format=json";
-        CurrencyResponse usdResponse = restTemplate
-                .getForEntity(udsUrl, CurrencyResponse.class).getBody();
+        CurrencyRatesResponse usdResponse = restTemplate
+                .getForEntity(udsUrl, CurrencyRatesResponse.class).getBody();
 
         assert usdResponse != null;
         double usdValue = usdResponse.rates().getFirst().ask();

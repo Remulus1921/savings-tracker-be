@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 
 @Service
 @Log4j2
@@ -40,7 +39,7 @@ public class CurrencyDataFetcher implements AssetDataFetcher {
                 CurrencyResponse[].class
         );
 
-        CurrencyResponse currencyResponse[] = response.getBody();
+        CurrencyResponse[] currencyResponse = response.getBody();
 
         if(currencyResponse == null || currencyResponse[0].rates() == null) {
             throw new RuntimeException("Failed to fetch currency data");

@@ -21,7 +21,7 @@ public class AssetHandlerRegistry {
     }
 
     public AssetHandler getHandler(String assetType) {
-        AssetHandler handler = handlers.get(assetType.toLowerCase());
+        AssetHandler handler = handlers.get(assetType.toLowerCase().replaceAll("\\s", ""));
         if (handler == null) {
             throw new IllegalArgumentException("No handler found for asset type: " + assetType);
         }

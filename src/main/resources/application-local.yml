@@ -15,5 +15,5 @@ config:
       cryptoUrl: "https://api.coincap.io/v2/assets/"
     types:
       - "currency"
-      - "crypto"
+      - "cryptocurrency"
       - "precious-metal"

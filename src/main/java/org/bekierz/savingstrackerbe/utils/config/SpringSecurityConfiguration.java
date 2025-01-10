@@ -82,9 +82,10 @@ public class SpringSecurityConfiguration {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:4200");
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.addAllowedHeader("*");
+        config.addExposedHeader("*");
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
