@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.bekierz.savingstrackerbe.asset.config.fetcher.AssetDataFetcher;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
-import org.bekierz.savingstrackerbe.asset.model.response.api.currency.CurrencyResponse;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.currency.CurrencyResponseTableA;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.repository.AssetTypeRepository;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +34,12 @@ public class CurrencyDataFetcher implements AssetDataFetcher {
 
     @Override
     public void fetchAssets() {
-        ResponseEntity<CurrencyResponse[]> response = restTemplate.getForEntity(
+        ResponseEntity<CurrencyResponseTableA[]> response = restTemplate.getForEntity(
                 assetConfigProps.api().currencyUrl() + "tables/a/?format=json",
-                CurrencyResponse[].class
+                CurrencyResponseTableA[].class
         );
 
-        CurrencyResponse[] currencyResponse = response.getBody();
+        CurrencyResponseTableA[] currencyResponse = response.getBody();
 
         if(currencyResponse == null || currencyResponse[0].rates() == null) {
             throw new RuntimeException("Failed to fetch currency data");

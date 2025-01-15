@@ -1,7 +1,7 @@
 package org.bekierz.savingstrackerbe.asset.controller;
 
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetDto;
-import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
+import org.bekierz.savingstrackerbe.asset.model.dto.AssetValueDto;
 import org.bekierz.savingstrackerbe.asset.service.AssetService;
 import org.bekierz.savingstrackerbe.commons.controller.BaseController;
 import org.bekierz.savingstrackerbe.commons.model.ApiResponse;
@@ -30,8 +30,8 @@ public class AssetController extends BaseController {
     }
 
     @GetMapping("/month/{assetCode}")
-    public ResponseEntity<ApiResponse<List<AssetMonthValueDto>>> getMonthValue(@PathVariable String assetCode) {
-        List<AssetMonthValueDto> assets = assetService.getMonthValue(assetCode);
+    public ResponseEntity<ApiResponse<List<AssetValueDto>>> getMonthValue(@PathVariable String assetCode) {
+        List<AssetValueDto> assets = assetService.getMonthValue(assetCode);
         return ok(assets, "Asset retrieved successfully");
     }
 }

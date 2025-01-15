@@ -5,8 +5,8 @@ import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.entity.AssetType;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.service.AssetService;
-import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandler;
-import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandlerRegistry;
+import org.bekierz.savingstrackerbe.datasource.service.AssetHandler;
+import org.bekierz.savingstrackerbe.datasource.service.AssetHandlerRegistry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -105,7 +105,7 @@ class AssetServiceTest {
         // when
         when(assetRepository.findByCode(assetCode)).thenReturn(asset);
         when(handlerRegistry.getHandler(asset.getAssetType().getName())).thenReturn(handler);
-        when(handler.handle(any(), any(), any())).thenReturn(Collections.emptyList());
+        when(handler.getMontValue(any(), any(), any())).thenReturn(Collections.emptyList());
         assetService.getMonthValue(assetCode);
 
         // then
@@ -113,7 +113,7 @@ class AssetServiceTest {
         verify(handlerRegistry, times(1)).getHandler(asset.getAssetType().getName());
         verify(handlerRegistry).getHandler("currency");
         verify(handlerRegistry.getHandler("currency"),
-                times(1)).handle(
+                times(1)).getMontValue(
                         asset,
                         LocalDate.now().minusDays(30),
                         LocalDate.now()

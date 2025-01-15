@@ -2,10 +2,10 @@ package org.bekierz.savingstrackerbe.asset.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetDto;
-import org.bekierz.savingstrackerbe.asset.model.dto.AssetMonthValueDto;
+import org.bekierz.savingstrackerbe.asset.model.dto.AssetValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
-import org.bekierz.savingstrackerbe.asset.service.datasource.AssetHandlerRegistry;
+import org.bekierz.savingstrackerbe.datasource.service.AssetHandlerRegistry;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,7 +35,7 @@ public class AssetService {
                 .collect(Collectors.toList());
     }
 
-    public List<AssetMonthValueDto> getMonthValue(String assetCode) {
+    public List<AssetValueDto> getMonthValue(String assetCode) {
         Asset asset = assetRepository.findByCode(assetCode);
 
         LocalDate endDate = LocalDate.now();
@@ -44,6 +44,6 @@ public class AssetService {
 
 
         return handlerRegistry.getHandler(asset.getAssetType().getName())
-                .handle(asset, startDate, endDate);
+                .getMontValue(asset, startDate, endDate);
     }
 }

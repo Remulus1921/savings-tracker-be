@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.unit.asset.config.fetcher.crypto;
 import org.bekierz.savingstrackerbe.asset.config.fetcher.crypto.CryptoDataFetcher;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
-import org.bekierz.savingstrackerbe.asset.model.response.api.crypto.CryptoResponse;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoResponse;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.repository.AssetTypeRepository;
 import org.junit.jupiter.api.Test;
@@ -41,8 +41,8 @@ class CryptoDataFetcherTest {
         // given
         CryptoResponse cryptoResponse = new CryptoResponse(
                 List.of(
-                        new CryptoResponse.Data("bitcoin", "BTC", "Bitcoin"),
-                        new CryptoResponse.Data("ethereum", "ETH", "Ethereum")
+                        new CryptoResponse.Data("bitcoin", "BTC", "Bitcoin", "50000"),
+                        new CryptoResponse.Data("ethereum", "ETH", "Ethereum", "3000")
                 )
         );
 

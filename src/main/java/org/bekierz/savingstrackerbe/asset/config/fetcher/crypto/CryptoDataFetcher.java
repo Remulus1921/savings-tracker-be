@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.asset.config.fetcher.crypto;
 import org.bekierz.savingstrackerbe.asset.config.fetcher.AssetDataFetcher;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
-import org.bekierz.savingstrackerbe.asset.model.response.api.crypto.CryptoResponse;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoResponse;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.repository.AssetTypeRepository;
 import org.springframework.http.ResponseEntity;
