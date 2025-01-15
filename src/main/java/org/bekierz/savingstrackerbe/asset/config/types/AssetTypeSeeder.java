@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import java.util.List;
 
 @Configuration
-@Order(2)
+@Order(1)
 public class AssetTypeSeeder {
     private final AssetTypeRepository assetTypeRepository;
     private final AssetConfigProps assetConfigProps;

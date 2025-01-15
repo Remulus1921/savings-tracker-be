@@ -5,6 +5,7 @@ import org.bekierz.savingstrackerbe.datasource.service.AssetHandlerRegistry;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingDto;
 import org.bekierz.savingstrackerbe.saving.model.entity.Saving;
 import org.bekierz.savingstrackerbe.saving.repository.SavingRepository;
+import org.bekierz.savingstrackerbe.user.model.CustomUserDetails;
 import org.bekierz.savingstrackerbe.utils.config.jwt.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,15 +19,12 @@ import java.util.Optional;
 public class SavingService {
 
     private final SavingRepository savingRepository;
-    private final JwtService jwtService;
     private final AssetHandlerRegistry handlerRegistry;
 
     public SavingService(SavingRepository savingRepository,
-                         JwtService jwtService,
                          AssetHandlerRegistry handlerRegistry
     ) {
         this.savingRepository = savingRepository;
-        this.jwtService = jwtService;
         this.handlerRegistry = handlerRegistry;
     }
 
@@ -80,7 +78,8 @@ public class SavingService {
     private String extractEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication instanceof UsernamePasswordAuthenticationToken) {
-            return jwtService.extractEmail((String) authentication.getCredentials());
+            CustomUserDetails token = (CustomUserDetails) authentication.getPrincipal();
+            return token.getUsername();
         }
         throw new IllegalStateException("User not authenticated");
     }

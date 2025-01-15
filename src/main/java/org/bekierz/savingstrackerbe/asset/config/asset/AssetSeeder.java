@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 @Configuration
-@Order(3)
+@Order(2)
 public class AssetSeeder {
     private final CurrencyDataFetcher currencyDataFetcher;
     private final CryptoDataFetcher cryptoDataFetcher;
