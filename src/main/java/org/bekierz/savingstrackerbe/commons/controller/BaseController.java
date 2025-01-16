@@ -16,6 +16,14 @@ public abstract class BaseController {
         return wrapResponse(null, message, HttpStatus.OK);
     }
 
+    protected <T> ResponseEntity<ApiResponse<Void>> created(String message) {
+        return wrapResponse(null, message, HttpStatus.CREATED);
+    }
+
+    protected <T> ResponseEntity<ApiResponse<Void>> noContent(String message) {
+        return wrapResponse(null, message, HttpStatus.NO_CONTENT);
+    }
+
     private <T> ResponseEntity<ApiResponse<T>> wrapResponse(T data, String message, HttpStatus status) {
         ApiResponse<T> response = new ApiResponse<>(data, message, status);
         return new ResponseEntity<>(response, status);

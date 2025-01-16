@@ -2,6 +2,7 @@ package org.bekierz.savingstrackerbe.saving.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.user.model.entity.User;
@@ -18,6 +19,7 @@ public class Saving {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty
+    @Positive
     private Double amount;
 
     @ManyToOne

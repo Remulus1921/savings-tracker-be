@@ -1,12 +1,16 @@
 package org.bekierz.savingstrackerbe.saving.service;
 
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetValueDto;
+import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
+import org.bekierz.savingstrackerbe.asset.service.AssetService;
 import org.bekierz.savingstrackerbe.datasource.service.AssetHandlerRegistry;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingDto;
+import org.bekierz.savingstrackerbe.saving.model.dto.SavingUpdateDto;
 import org.bekierz.savingstrackerbe.saving.model.entity.Saving;
 import org.bekierz.savingstrackerbe.saving.repository.SavingRepository;
 import org.bekierz.savingstrackerbe.user.model.CustomUserDetails;
-import org.bekierz.savingstrackerbe.utils.config.jwt.JwtService;
+import org.bekierz.savingstrackerbe.user.model.entity.User;
+import org.bekierz.savingstrackerbe.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,38 +24,31 @@ public class SavingService {
 
     private final SavingRepository savingRepository;
     private final AssetHandlerRegistry handlerRegistry;
+    private final AssetService assetService;
+    private final UserRepository userRepository;
 
     public SavingService(SavingRepository savingRepository,
-                         AssetHandlerRegistry handlerRegistry
-    ) {
+                         AssetHandlerRegistry handlerRegistry,
+                         AssetService assetService,
+                         UserRepository userRepository) {
         this.savingRepository = savingRepository;
         this.handlerRegistry = handlerRegistry;
+        this.assetService = assetService;
+        this.userRepository = userRepository;
     }
 
     public List<SavingDto> getUserSavings() {
         String email = this.extractEmail();
 
         return savingRepository.findByUserEmail(email).stream().map(
-                saving -> SavingDto.builder()
-                            .amount(saving.getAmount())
-                            .assetName(saving.getAsset().getName())
-                            .assetCode(saving.getAsset().getCode())
-                            .value(handlerRegistry.getHandler(saving
-                                            .getAsset()
-                                            .getAssetType()
-                                            .getName())
-                                    .getAssetValue(saving
-                                            .getAsset()
-                                            .getCode()
-                                    )
-                                    .price() * saving.getAmount())
-                            .build()
+                this::buildDto
         ).toList();
     }
 
     public Optional<SavingDto> getSavingValue(String assetCode) {
         String email = this.extractEmail();
-        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode);
+        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode)
+                .orElseThrow(() -> new RuntimeException("Saving not found"));
 
         if(saving == null) {
             return Optional.empty();
@@ -75,6 +72,47 @@ public class SavingService {
                 .build());
     }
 
+    public void addNewSaving(SavingDto savingDto) {
+        String email = this.extractEmail();
+
+        Optional<Saving> saving = savingRepository.findSavingByUserEmailAndAssetCode(email, savingDto.assetCode());
+        if (saving.isPresent()) {
+            saving.get().setAmount(saving.get().getAmount() + savingDto.amount());
+        }
+        else {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            Asset asset = assetService.getAsset(savingDto.assetCode());
+
+            saving = Optional.of(Saving.builder()
+                    .amount(savingDto.amount())
+                    .asset(asset)
+                    .user(user)
+                    .build()
+            );
+        }
+
+        savingRepository.save(saving.get());
+    }
+
+    public void deleteSaving(String assetCode) {
+        String email = this.extractEmail();
+
+        savingRepository.deleteSavingByUserEmailAndAssetCode(email, assetCode);
+    }
+
+    public SavingDto updateSaving(SavingUpdateDto updateDto, String assetCode) {
+        String email = this.extractEmail();
+
+        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode)
+                .orElseThrow(() -> new RuntimeException("Saving not found"));
+
+        saving.setAmount(updateDto.amount());
+        savingRepository.save(saving);
+
+        return this.buildDto(saving);
+    }
+
     private String extractEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication instanceof UsernamePasswordAuthenticationToken) {
@@ -82,5 +120,22 @@ public class SavingService {
             return token.getUsername();
         }
         throw new IllegalStateException("User not authenticated");
+    }
+
+    private SavingDto buildDto(Saving saving) {
+        return SavingDto.builder()
+                .amount(saving.getAmount())
+                .assetName(saving.getAsset().getName())
+                .assetCode(saving.getAsset().getCode())
+                .value(handlerRegistry.getHandler(saving
+                                .getAsset()
+                                .getAssetType()
+                                .getName())
+                        .getAssetValue(saving
+                                .getAsset()
+                                .getCode()
+                        )
+                        .price() * saving.getAmount())
+                .build();
     }
 }

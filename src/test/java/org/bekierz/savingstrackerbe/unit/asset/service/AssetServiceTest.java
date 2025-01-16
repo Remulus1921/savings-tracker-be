@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -103,7 +104,7 @@ class AssetServiceTest {
                 .build();
 
         // when
-        when(assetRepository.findByCode(assetCode)).thenReturn(asset);
+        when(assetRepository.findByCode(assetCode)).thenReturn(Optional.of(asset));
         when(handlerRegistry.getHandler(asset.getAssetType().getName())).thenReturn(handler);
         when(handler.getMontValue(any(), any(), any())).thenReturn(Collections.emptyList());
         assetService.getMonthValue(assetCode);
