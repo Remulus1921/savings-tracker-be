@@ -1,25 +1,31 @@
-package org.bekierz.savingstrackerbe.asset.config.asset;
+package org.bekierz.savingstrackerbe.asset.config.seeder;
 
 import org.bekierz.savingstrackerbe.asset.config.fetcher.crypto.CryptoDataFetcher;
 import org.bekierz.savingstrackerbe.asset.config.fetcher.currency.CurrencyDataFetcher;
+import org.bekierz.savingstrackerbe.asset.config.fetcher.type.AssetTypeFetcher;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 @Configuration
-@Order(2)
-public class AssetSeeder {
+public class Seeder {
     private final CurrencyDataFetcher currencyDataFetcher;
     private final CryptoDataFetcher cryptoDataFetcher;
-    public AssetSeeder(CurrencyDataFetcher currencyDataFetcher, CryptoDataFetcher cryptoDataFetcher) {
+    private final AssetTypeFetcher assetTypeFetcher;
+
+    public Seeder(CurrencyDataFetcher currencyDataFetcher,
+                  CryptoDataFetcher cryptoDataFetcher,
+                  AssetTypeFetcher assetTypeFetcher
+    ) {
         this.currencyDataFetcher = currencyDataFetcher;
         this.cryptoDataFetcher = cryptoDataFetcher;
+        this.assetTypeFetcher = assetTypeFetcher;
     }
 
     @Bean
     public CommandLineRunner seedAssets() {
         return args -> {
+            assetTypeFetcher.fetchTypes();
             currencyDataFetcher.fetchAssets();
             cryptoDataFetcher.fetchAssets();
         };
