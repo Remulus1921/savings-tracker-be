@@ -27,7 +27,7 @@ public class Seeder {
         return args -> {
             assetTypeFetcher.fetchTypes();
             currencyDataFetcher.fetchAssets();
-            cryptoDataFetcher.fetchAssets();
+            //cryptoDataFetcher.fetchAssets();
         };
     }
 }

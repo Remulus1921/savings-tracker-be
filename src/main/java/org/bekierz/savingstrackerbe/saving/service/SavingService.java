@@ -65,7 +65,6 @@ public class SavingService {
 
         return Optional.of(SavingDto.builder()
                 .amount(saving.getAmount())
-                .assetName(saving.getAsset().getName())
                 .assetCode(saving.getAsset().getCode())
                 .value(saving.getAmount() * assetValue.price())
                 .exchangeRate(assetValue.price())
@@ -113,6 +112,22 @@ public class SavingService {
         return this.buildDto(saving);
     }
 
+    public Double getTotalSavings() {
+        String email = this.extractEmail();
+
+        return savingRepository.findByUserEmail(email).stream()
+                .map(saving -> saving.getAmount() * handlerRegistry.getHandler(saving
+                        .getAsset()
+                        .getAssetType()
+                        .getName())
+                        .getAssetValue(saving
+                                .getAsset()
+                                .getCode()
+                        )
+                        .price())
+                .reduce(0.00, Double::sum);
+    }
+
     private String extractEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication instanceof UsernamePasswordAuthenticationToken) {
@@ -125,7 +140,6 @@ public class SavingService {
     private SavingDto buildDto(Saving saving) {
         return SavingDto.builder()
                 .amount(saving.getAmount())
-                .assetName(saving.getAsset().getName())
                 .assetCode(saving.getAsset().getCode())
                 .value(handlerRegistry.getHandler(saving
                                 .getAsset()

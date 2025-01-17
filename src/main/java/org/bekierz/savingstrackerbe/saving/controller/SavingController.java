@@ -37,6 +37,12 @@ public class SavingController extends BaseController {
         return ok(saving, "Saving retrieved successfully");
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<ApiResponse<Double>> getTotalSavings() {
+        Double total = savingService.getTotalSavings();
+        return ok(total, "Total savings retrieved successfully");
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> postUserSaving(@RequestBody SavingDto saving) {
         savingService.addNewSaving(saving);

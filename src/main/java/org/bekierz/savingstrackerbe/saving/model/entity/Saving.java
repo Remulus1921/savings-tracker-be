@@ -18,7 +18,6 @@ public class Saving {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
     @Positive
     private Double amount;
 

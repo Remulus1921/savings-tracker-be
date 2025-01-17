@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -112,11 +113,9 @@ class SavingServiceTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(100.0, result.getFirst().amount());
-        assertEquals("Bitcoin", result.getFirst().assetName());
         assertEquals("BTC", result.getFirst().assetCode());
         assertEquals(200.0, result.getFirst().value());
         assertEquals(200.0, result.get(1).amount());
-        assertEquals("Euro", result.get(1).assetName());
         assertEquals("EUR", result.get(1).assetCode());
         assertEquals(600.0, result.get(1).value());
     }
@@ -147,7 +146,7 @@ class SavingServiceTest {
                 .build();
 
         // when
-        when(savingRepository.findSavingByUserEmailAndAssetCode(EMAIL, assetCode)).thenReturn(saving);
+        when(savingRepository.findSavingByUserEmailAndAssetCode(EMAIL, assetCode)).thenReturn(Optional.ofNullable(saving));
         when(handlerRegistry.getHandler("cryptocurrency")).thenReturn(handler);
         when(handler.getAssetValue("BTC")).thenReturn(new AssetValueDto("BTC", 2.0));
 
@@ -157,7 +156,6 @@ class SavingServiceTest {
         assertNotNull(result);
         assertTrue(result.isPresent());
         assertEquals(100.0, result.get().amount());
-        assertEquals("Bitcoin", result.get().assetName());
         assertEquals("BTC", result.get().assetCode());
         assertEquals(200.0, result.get().value());
         assertEquals(2.0, result.get().exchangeRate());

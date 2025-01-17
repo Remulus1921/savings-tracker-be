@@ -12,7 +12,6 @@ public record SavingDto(
         @JsonFormat(pattern = "0.00")
         @Positive
         Double amount,
-        String assetName,
         String assetCode,
         Double value,
         @Nullable
