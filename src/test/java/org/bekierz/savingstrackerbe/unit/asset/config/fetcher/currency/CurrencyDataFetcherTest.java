@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.unit.asset.config.fetcher.currency;
 import org.bekierz.savingstrackerbe.asset.config.fetcher.currency.CurrencyDataFetcher;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
-import org.bekierz.savingstrackerbe.datasource.model.api.response.currency.CurrencyResponseTableA;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.currency.CurrencyResponseFetcher;
 import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.asset.repository.AssetTypeRepository;
 import org.junit.jupiter.api.Test;
@@ -38,23 +38,23 @@ class CurrencyDataFetcherTest {
     @Test
     public void should_fetch_currency_data() {
         // given
-        CurrencyResponseTableA[] response = new CurrencyResponseTableA[]{
-                new CurrencyResponseTableA(
+        CurrencyResponseFetcher[] response = new CurrencyResponseFetcher[]{
+                new CurrencyResponseFetcher(
                         "A",
                         "1",
                         "2025-01-09",
                         List.of(
-                                new CurrencyResponseTableA.Rate(
+                                new CurrencyResponseFetcher.Rate(
                                         "euro",
                                         "EUR",
                                         4.2226
                                 ),
-                                new CurrencyResponseTableA.Rate(
+                                new CurrencyResponseFetcher.Rate(
                                         "dollar",
                                         "USD",
                                         3.2226
                                 ),
-                                new CurrencyResponseTableA.Rate(
+                                new CurrencyResponseFetcher.Rate(
                                         "pound",
                                         "GBP",
                                         5.2226
@@ -72,7 +72,7 @@ class CurrencyDataFetcherTest {
         when(assetConfigProps.api()).thenReturn(api);
         when(restTemplate.getForEntity(
                 assetConfigProps.api().currencyUrl() + "tables/a/?format=json",
-                CurrencyResponseTableA[].class
+                CurrencyResponseFetcher[].class
         )).thenReturn(new ResponseEntity<>(response, HttpStatus.OK));
 
         currencyDataFetcher.fetchAssets();

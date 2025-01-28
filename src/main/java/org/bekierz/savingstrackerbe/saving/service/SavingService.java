@@ -5,6 +5,7 @@ import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.service.AssetService;
 import org.bekierz.savingstrackerbe.datasource.service.AssetHandlerRegistry;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingDto;
+import org.bekierz.savingstrackerbe.saving.model.dto.SavingPostDto;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingUpdateDto;
 import org.bekierz.savingstrackerbe.saving.model.entity.Saving;
 import org.bekierz.savingstrackerbe.saving.repository.SavingRepository;
@@ -47,7 +48,7 @@ public class SavingService {
 
     public Optional<SavingDto> getSavingValue(String assetCode) {
         String email = this.extractEmail();
-        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode)
+        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode.toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Saving not found"));
 
         if(saving == null) {
@@ -71,17 +72,17 @@ public class SavingService {
                 .build());
     }
 
-    public void addNewSaving(SavingDto savingDto) {
+    public void addNewSaving(SavingPostDto savingDto) {
         String email = this.extractEmail();
 
-        Optional<Saving> saving = savingRepository.findSavingByUserEmailAndAssetCode(email, savingDto.assetCode());
+        Optional<Saving> saving = savingRepository.findSavingByUserEmailAndAssetCode(email, savingDto.assetCode().toUpperCase());
         if (saving.isPresent()) {
             saving.get().setAmount(saving.get().getAmount() + savingDto.amount());
         }
         else {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            Asset asset = assetService.getAsset(savingDto.assetCode());
+            Asset asset = assetService.getAsset(savingDto.assetCode().toUpperCase());
 
             saving = Optional.of(Saving.builder()
                     .amount(savingDto.amount())
@@ -97,13 +98,13 @@ public class SavingService {
     public void deleteSaving(String assetCode) {
         String email = this.extractEmail();
 
-        savingRepository.deleteSavingByUserEmailAndAssetCode(email, assetCode);
+        savingRepository.deleteSavingByUserEmailAndAssetCode(email, assetCode.toUpperCase());
     }
 
     public SavingDto updateSaving(SavingUpdateDto updateDto, String assetCode) {
         String email = this.extractEmail();
 
-        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode)
+        Saving saving = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode.toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Saving not found"));
 
         saving.setAmount(updateDto.amount());

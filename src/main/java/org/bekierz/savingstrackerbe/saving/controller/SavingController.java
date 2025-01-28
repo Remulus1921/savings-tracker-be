@@ -4,6 +4,7 @@ import org.bekierz.savingstrackerbe.commons.controller.BaseController;
 import org.bekierz.savingstrackerbe.commons.model.ApiResponse;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingDto;
 import org.bekierz.savingstrackerbe.saving.model.dto.SavingUpdateDto;
+import org.bekierz.savingstrackerbe.saving.model.dto.SavingPostDto;
 import org.bekierz.savingstrackerbe.saving.service.SavingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class SavingController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> postUserSaving(@RequestBody SavingDto saving) {
+    public ResponseEntity<ApiResponse<Void>> postUserSaving(@RequestBody SavingPostDto saving) {
         savingService.addNewSaving(saving);
         return created("Saving added successfully");
     }

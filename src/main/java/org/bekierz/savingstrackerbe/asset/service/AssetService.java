@@ -36,7 +36,7 @@ public class AssetService {
     }
 
     public List<AssetValueDto> getMonthValue(String assetCode) {
-        Asset asset = assetRepository.findByCode(assetCode)
+        Asset asset = assetRepository.findByCode(assetCode.toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Asset not found"));
 
         LocalDate endDate = LocalDate.now();
@@ -49,7 +49,7 @@ public class AssetService {
     }
 
     public Asset getAsset(String assetCode) {
-        return assetRepository.findByCode(assetCode)
+        return assetRepository.findByCode(assetCode.toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Asset not found"));
     }
 }

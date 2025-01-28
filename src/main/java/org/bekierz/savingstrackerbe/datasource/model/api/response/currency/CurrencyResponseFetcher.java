@@ -2,7 +2,7 @@ package org.bekierz.savingstrackerbe.datasource.model.api.response.currency;
 
 import java.util.List;
 
-public record CurrencyResponseTableA(
+public record CurrencyResponseFetcher(
         String table,
         String no,
         String effectiveDate,

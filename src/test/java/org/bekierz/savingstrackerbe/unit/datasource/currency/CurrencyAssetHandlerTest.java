@@ -3,7 +3,7 @@ package org.bekierz.savingstrackerbe.unit.datasource.currency;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.entity.AssetType;
-import org.bekierz.savingstrackerbe.datasource.model.api.response.currency.CurrencyResponseTableC;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.currency.CurrencyResponse;
 import org.bekierz.savingstrackerbe.datasource.service.currency.CurrencyAssetHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,18 +49,18 @@ class CurrencyAssetHandlerTest {
         LocalDate endDate = LocalDate.of(2025, 1, 31);
         LocalDate startDate = endDate.minusDays(30);
 
-        CurrencyResponseTableC currencyResponse = new CurrencyResponseTableC(
+        CurrencyResponse currencyResponse = new CurrencyResponse(
                 "C",
                 "euro",
                 "EUR",
                 List.of(
-                        new CurrencyResponseTableC.Rate(
+                        new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-10",
                                 4.2226,
                                 4.308
                         ),
-                        new CurrencyResponseTableC.Rate(
+                        new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-09",
                                 4.223,
@@ -72,8 +72,8 @@ class CurrencyAssetHandlerTest {
         // when
         when(assetConfigProps.api()).thenReturn(api);
         when(restTemplate.getForEntity(
-                "http://mocked-currency-url/rates/c/EUR/2025-01-01/2025-01-31/",
-                CurrencyResponseTableC.class
+                "http://mocked-currency-url/rates/a/EUR/2025-01-01/2025-01-31/",
+                CurrencyResponse.class
         )).thenReturn(new ResponseEntity<>(currencyResponse, null, 200));
 
         var result = currencyAssetHandler.getMontValue(asset, startDate, endDate);
@@ -104,12 +104,12 @@ class CurrencyAssetHandlerTest {
                 "http://mocked-crypto-url/"
         );
 
-        CurrencyResponseTableC currencyResponse = new CurrencyResponseTableC(
+        CurrencyResponse currencyResponse = new CurrencyResponse(
                 "C",
                 "euro",
                 "EUR",
                 List.of(
-                        new CurrencyResponseTableC.Rate(
+                        new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-10",
                                 4.2226,
@@ -121,8 +121,8 @@ class CurrencyAssetHandlerTest {
         // when
         when(assetConfigProps.api()).thenReturn(api);
         when(restTemplate.getForEntity(
-                "http://mocked-currency-url/rates/c/EUR?format=json",
-                CurrencyResponseTableC.class
+                "http://mocked-currency-url/rates/a/EUR?format=json",
+                CurrencyResponse.class
         )).thenReturn(new ResponseEntity<>(currencyResponse, null, 200));
 
         var result = currencyAssetHandler.getAssetValue("EUR");

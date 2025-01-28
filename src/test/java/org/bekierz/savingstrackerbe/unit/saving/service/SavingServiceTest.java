@@ -167,12 +167,12 @@ class SavingServiceTest {
         String assetCode = "BTC";
 
         // when
-        when(savingRepository.findSavingByUserEmailAndAssetCode(EMAIL, assetCode)).thenReturn(null);
-
-        var result = savingService.getSavingValue(assetCode);
+        when(savingRepository.findSavingByUserEmailAndAssetCode(EMAIL, assetCode)).thenReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> savingService.getSavingValue(assetCode)
+        );
 
         // given
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertEquals("Saving not found", exception.getMessage());
     }
 }
