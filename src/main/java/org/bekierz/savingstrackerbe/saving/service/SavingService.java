@@ -98,7 +98,9 @@ public class SavingService {
     public void deleteSaving(String assetCode) {
         String email = this.extractEmail();
 
-        savingRepository.deleteSavingByUserEmailAndAssetCode(email, assetCode.toUpperCase());
+        Saving savingToDelete = savingRepository.findSavingByUserEmailAndAssetCode(email, assetCode.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Saving not found"));
+        savingRepository.delete(savingToDelete);
     }
 
     public SavingDto updateSaving(SavingUpdateDto updateDto, String assetCode) {

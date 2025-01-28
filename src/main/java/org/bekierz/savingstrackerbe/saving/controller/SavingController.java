@@ -57,6 +57,7 @@ public class SavingController extends BaseController {
     }
 
     @DeleteMapping("/{assetCode}")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content, resource deleted")
     public ResponseEntity<ApiResponse<Void>> deleteSaving(@PathVariable String assetCode) {
         savingService.deleteSaving(assetCode);
         return noContent("Saving deleted successfully");

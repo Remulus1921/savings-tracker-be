@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface SavingRepository extends JpaRepository<Saving, Long> {
     List<Saving> findByUserEmail(String email);
     Optional<Saving> findSavingByUserEmailAndAssetCode(String email, String assetCode);
-    void deleteSavingByUserEmailAndAssetCode(String email, String assetCode);
 }
