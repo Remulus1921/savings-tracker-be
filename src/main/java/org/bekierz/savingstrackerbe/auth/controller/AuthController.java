@@ -5,10 +5,7 @@ import org.bekierz.savingstrackerbe.auth.model.request.AuthenticationRequest;
 import org.bekierz.savingstrackerbe.auth.model.request.RegisterRequest;
 import org.bekierz.savingstrackerbe.auth.model.response.AuthenticationResponse;
 import org.bekierz.savingstrackerbe.auth.service.AuthService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -28,5 +25,10 @@ public class AuthController {
     @PostMapping("/login")
     public AuthenticationResponse authenticateUser(@Valid @RequestBody AuthenticationRequest authenticateRequest) {
         return authService.authenticateUser(authenticateRequest);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Test";
     }
 }
