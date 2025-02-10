@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, Long> {
     Optional<Asset> findByCode(String code);
+    boolean existsAssetByCode(String code);
 }

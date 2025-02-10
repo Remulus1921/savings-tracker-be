@@ -45,7 +45,9 @@ public class CryptoDataFetcher implements AssetDataFetcher {
                         .name(data.name())
                         .code(data.symbol())
                         .assetType(assetTypeRepository.findByName("cryptocurrency"))
-                        .build())
+                        .build()
+                )
+                .filter(asset -> !assetRepository.existsAssetByCode(asset.getCode()))
                 .toList()
         );
     }

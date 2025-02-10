@@ -50,7 +50,9 @@ public class CurrencyDataFetcher implements AssetDataFetcher {
                         .name(rate.currency())
                         .code(rate.code())
                         .assetType(assetTypeRepository.findByName("currency"))
-                        .build())
+                        .build()
+                )
+                .filter(asset -> !assetRepository.existsAssetByCode(asset.getCode()))
                 .toList()
         );
     }

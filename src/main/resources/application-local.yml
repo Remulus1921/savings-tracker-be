@@ -6,7 +6,6 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 config:
-  frontend-url: ${FRONT_END_URL}
   jwt:
     secret-key: ${JWT_SECRET_KEY}
   asset:
@@ -16,4 +15,3 @@ config:
     types:
       - "currency"
       - "cryptocurrency"
-      - "precious-metal"

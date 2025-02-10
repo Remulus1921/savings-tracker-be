@@ -16,6 +16,7 @@ public class Asset {
     @NotEmpty
     private String name;
     @NotEmpty
+    @Column(unique = true, nullable = false)
     private String code;
 
     @ManyToOne

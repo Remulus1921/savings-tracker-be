@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AssetTypeRepository extends JpaRepository<AssetType, Long> {
     AssetType findByName(String name);
+    boolean existsAssetTypeByName(String name);
 }

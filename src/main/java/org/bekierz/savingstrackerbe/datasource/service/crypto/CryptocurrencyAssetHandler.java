@@ -36,7 +36,7 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
     public List<AssetValueDto> getMontValue(Asset asset, LocalDate startDate, LocalDate endDate) {
         long end = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
         long start = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + asset.getName()
+        String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + asset.getName().toLowerCase()
                 + "/history?interval=d1&start=" + start + "&end=" + end;
 
         ResponseEntity<CryptoMonthResponse> response = restTemplate

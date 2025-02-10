@@ -57,14 +57,12 @@ class CurrencyAssetHandlerTest {
                         new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-10",
-                                4.2226,
-                                4.308
+                                4.2226
                         ),
                         new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-09",
-                                4.223,
-                                4.568
+                                4.223
                         )
                 )
         );
@@ -82,9 +80,9 @@ class CurrencyAssetHandlerTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("2025-01-10", result.getFirst().date());
-        assertEquals(4.308, result.getFirst().price());
+        assertEquals(4.2226, result.getFirst().price());
         assertEquals("2025-01-09", result.getLast().date());
-        assertEquals(4.568, result.getLast().price());
+        assertEquals(4.223, result.getLast().price());
     }
 
     @Test
@@ -112,8 +110,7 @@ class CurrencyAssetHandlerTest {
                         new CurrencyResponse.Rate(
                                 "006/C/NBP/2025",
                                 "2025-01-10",
-                                4.2226,
-                                4.308
+                                4.2226
                         )
                 )
         );
@@ -130,6 +127,6 @@ class CurrencyAssetHandlerTest {
         // then
         assertNotNull(result);
         assertEquals("2025-01-10", result.date());
-        assertEquals(4.308, result.price());
+        assertEquals(4.2226, result.price());
     }
 }

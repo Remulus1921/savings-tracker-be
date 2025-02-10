@@ -23,6 +23,7 @@ public class AssetTypeFetcher {
                         .name(type)
                         .build()
                 )
+                .filter(assetType -> !assetTypeRepository.existsAssetTypeByName(assetType.getName()))
                 .toList();
         assetTypeRepository.saveAll(typeList);
     }
