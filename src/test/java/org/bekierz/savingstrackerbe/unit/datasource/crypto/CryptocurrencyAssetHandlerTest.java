@@ -4,8 +4,10 @@ import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
 import org.bekierz.savingstrackerbe.asset.model.entity.AssetType;
+import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoMonthResponse;
 import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoResponse;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.SingleCryptoResponse;
 import org.bekierz.savingstrackerbe.datasource.service.crypto.CryptocurrencyAssetHandler;
 import org.bekierz.savingstrackerbe.datasource.service.currency.CurrencyAssetHandler;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -30,6 +34,8 @@ class CryptocurrencyAssetHandlerTest {
     private AssetConfigProps assetConfigProps;
     @Mock
     private CurrencyAssetHandler currencyAssetHandler;
+    @Mock
+    private AssetRepository assetRepository;
     @InjectMocks
     private CryptocurrencyAssetHandler cryptocurrencyAssetHandler;
 
@@ -55,15 +61,16 @@ class CryptocurrencyAssetHandlerTest {
 
         CryptoMonthResponse data = new CryptoMonthResponse(
                 List.of(
-                        new CryptoMonthResponse.Data("50000", 1735686000000L),
-                        new CryptoMonthResponse.Data("60000", 1735686000000L)
-                )
+                        new CryptoMonthResponse.Data("50000", 1735686000000L, new Date()),
+                        new CryptoMonthResponse.Data("60000", 1735686000000L, new Date())
+                ),
+                123456789L
         );
         AssetValueDto usdValue = new AssetValueDto("2025-01-10", 4.1795);
 
         // when
         when(assetConfigProps.api()).thenReturn(api);
-        when(restTemplate.getForEntity("http://mocked-crypto-url/Bitcoin/history?interval=d1&start=1735686000000&end=1738278000000", CryptoMonthResponse.class))
+        when(restTemplate.getForEntity("http://mocked-crypto-url/bitcoin/history?interval=d1&start=1735686000000&end=1738278000000", CryptoMonthResponse.class))
                 .thenReturn(new ResponseEntity<>(data, null, 200));
         when(currencyAssetHandler.getAssetValue("usd")).thenReturn(usdValue);
         var result = cryptocurrencyAssetHandler.getMontValue(asset, startDate, endDate);
@@ -94,19 +101,18 @@ class CryptocurrencyAssetHandlerTest {
                 "http://mocked-crypto-url/"
         );
 
-        CryptoResponse data = new CryptoResponse(
-                List.of(
-                        new CryptoResponse.Data("bitcoin", "BTC", "Bitcoin", "50000")
-                )
+        SingleCryptoResponse data = new SingleCryptoResponse(
+                new SingleCryptoResponse.Data("bitcoin", "BTC", "Bitcoin", "50000")
         );
 
         AssetValueDto usdValue = new AssetValueDto("2025-01-10", 4.1795);
 
         // when
         when(assetConfigProps.api()).thenReturn(api);
-        when(restTemplate.getForEntity("http://mocked-crypto-url/BTC", CryptoResponse.class))
+        when(restTemplate.getForEntity("http://mocked-crypto-url/bitcoin", SingleCryptoResponse.class))
                 .thenReturn(new ResponseEntity<>(data, null, 200));
         when(currencyAssetHandler.getAssetValue("usd")).thenReturn(usdValue);
+        when(assetRepository.findByCode("BTC")).thenReturn(Optional.of(asset));
         var result = cryptocurrencyAssetHandler.getAssetValue("BTC");
 
         // then

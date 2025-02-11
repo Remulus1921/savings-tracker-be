@@ -3,8 +3,10 @@ package org.bekierz.savingstrackerbe.datasource.service.crypto;
 import org.bekierz.savingstrackerbe.asset.config.properties.AssetConfigProps;
 import org.bekierz.savingstrackerbe.asset.model.dto.AssetValueDto;
 import org.bekierz.savingstrackerbe.asset.model.entity.Asset;
+import org.bekierz.savingstrackerbe.asset.repository.AssetRepository;
 import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoMonthResponse;
 import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.CryptoResponse;
+import org.bekierz.savingstrackerbe.datasource.model.api.response.crypto.SingleCryptoResponse;
 import org.bekierz.savingstrackerbe.datasource.service.AssetHandler;
 import org.bekierz.savingstrackerbe.datasource.service.currency.CurrencyAssetHandler;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +25,15 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
     private final RestTemplate restTemplate;
     private final AssetConfigProps assetConfigProps;
     private final CurrencyAssetHandler currencyAssetHandler;
+    private final AssetRepository assetRepository;
 
     public CryptocurrencyAssetHandler(RestTemplate restTemplate,
                                       AssetConfigProps assetConfigProps,
-                                      CurrencyAssetHandler currencyAssetHandler) {
+                                      CurrencyAssetHandler currencyAssetHandler, AssetRepository assetRepository) {
         this.restTemplate = restTemplate;
         this.assetConfigProps = assetConfigProps;
         this.currencyAssetHandler = currencyAssetHandler;
+        this.assetRepository = assetRepository;
     }
 
     @Override
@@ -61,9 +65,12 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
 
     @Override
     public AssetValueDto getAssetValue(String code) {
-        String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + code;
-        ResponseEntity<CryptoResponse> response = restTemplate
-                .getForEntity(cryptocurrencyApiUrl, CryptoResponse.class);
+        Asset asset = assetRepository.findByCode(code).orElseThrow(
+                () -> new RuntimeException("Asset Not found")
+        );
+        String cryptocurrencyApiUrl = assetConfigProps.api().cryptoUrl() + asset.getName().toLowerCase();
+        ResponseEntity<SingleCryptoResponse> response = restTemplate
+                .getForEntity(cryptocurrencyApiUrl, SingleCryptoResponse.class);
 
         double usdValue = currencyAssetHandler.getAssetValue("usd").price();
 
@@ -71,8 +78,8 @@ public class CryptocurrencyAssetHandler implements AssetHandler {
             throw new RuntimeException("Error while fetching data from external API");
         }
         return AssetValueDto.builder()
-                .date(response.getBody().data().getFirst().symbol())
-                .price(Double.parseDouble(response.getBody().data().getFirst().priceUsd()) * usdValue)
+                .date(response.getBody().data().symbol())
+                .price(Double.parseDouble(response.getBody().data().priceUsd()) * usdValue)
                 .build();
     }
 }
