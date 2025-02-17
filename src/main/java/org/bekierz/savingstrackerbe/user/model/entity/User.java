@@ -1,8 +1,11 @@
 package org.bekierz.savingstrackerbe.user.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.bekierz.savingstrackerbe.saving.model.entity.Saving;
 
+import java.util.List;
 import java.util.Objects;
 
 @Builder
@@ -15,16 +18,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
+    @NotEmpty
     private String email;
-    @NonNull
+    @NotEmpty
     @Setter
     private String password;
-    @NonNull
+    @NotEmpty
     private String name;
-    @NonNull
+    @NotEmpty
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToMany
+    private List<Saving> savingList;
 
     @Override
     public boolean equals(final Object o) {

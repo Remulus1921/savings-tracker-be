@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class EnvironmentVariables {
-    @Value("${config.frontend-url}")
-    private String frontendUrl;
     @Value("${config.jwt.secret-key}")
     private String jwtSecretKey;
 }

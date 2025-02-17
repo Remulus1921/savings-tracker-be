@@ -16,3 +16,10 @@ config:
   frontend-url: ssdasdadawe
   jwt:
     secret-key: secret
+  asset:
+    api:
+      currencyUrl: "https://api.nbp.pl/api/exchangerates/"
+      cryptoUrl: "https://api.coincap.io/v2/assets/"
+    types:
+      - "currency"
+      - "crypto"
